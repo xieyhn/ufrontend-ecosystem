@@ -12,7 +12,6 @@ const vue_loader_1 = require("vue-loader");
 const fork_ts_checker_webpack_plugin_1 = __importDefault(require("fork-ts-checker-webpack-plugin"));
 const terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 const logger_1 = require("./logger");
-const autoprefixer_1 = __importDefault(require("autoprefixer"));
 function createWebpackConfig(command, options) {
     const development = command === 'dev';
     const { debug = false } = options || {};
@@ -23,17 +22,7 @@ function createWebpackConfig(command, options) {
     const tsconfigFile = path_1.default.resolve(cwd, 'tsconfig.json');
     const cssLoaders = [
         development ? 'style-loader' : mini_css_extract_plugin_1.default.loader,
-        'css-loader',
-        {
-            loader: 'postcss-loader',
-            options: {
-                postcssOptions: {
-                    plugins: [
-                        (0, autoprefixer_1.default)()
-                    ]
-                }
-            }
-        }
+        'css-loader'
     ];
     return {
         mode: command === 'dev' ? 'development' : 'production',
@@ -128,9 +117,7 @@ function createWebpackConfig(command, options) {
                     }
                 }
             }
-        },
-        // https://webpack.js.org/configuration/stats/
-        stats: 'errors-warnings'
+        }
     };
 }
 exports.createWebpackConfig = createWebpackConfig;
