@@ -122,6 +122,8 @@ export function createWebpackConfig(
           }
         }
       }
-    }
+    },
+    // https://webpack.js.org/configuration/stats/
+    stats: 'errors-warnings'
   }
 }

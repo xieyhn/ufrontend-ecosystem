@@ -117,7 +117,9 @@ function createWebpackConfig(command, options) {
                     }
                 }
             }
-        }
+        },
+        // https://webpack.js.org/configuration/stats/
+        stats: 'errors-warnings'
     };
 }
 exports.createWebpackConfig = createWebpackConfig;
