@@ -1,4 +1,4 @@
-import type { Configuration } from 'webpack'
+import type { Configuration, RuleSetUseItem } from 'webpack'
 import type { Command } from './Compiler'
 import path from 'path'
 import { DefinePlugin } from 'webpack'
@@ -8,6 +8,7 @@ import { VueLoaderPlugin } from 'vue-loader'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import TerserWebpackPlugin from 'terser-webpack-plugin'
 import { log } from './logger'
+import autoprefixer from 'autoprefixer'
 
 export function createWebpackConfig(
   command: Command,
@@ -24,9 +25,19 @@ export function createWebpackConfig(
   const fileBaseName = debug ? '[name].[contenthash:8]': '[contenthash]'
   const tsconfigFile = path.resolve(cwd, 'tsconfig.json')
 
-  const cssLoaders = [
+  const cssLoaders: RuleSetUseItem[] = [
     development ? 'style-loader' : MiniCssExtractPlugin.loader,
-    'css-loader'
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        postcssOptions: {
+          plugins: [
+            autoprefixer()
+          ]
+        }
+      }
+    }
   ]
 
   return {
