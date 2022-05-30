@@ -1,6 +1,6 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -15,12 +15,14 @@
   "dependencies": {
     "@vue/compiler-sfc": "^3.2.36",
     "autoprefixer": "^10.4.7",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.0",
     "minimist": "^1.2.6",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "postcss": "^8.4.14",
     "postcss-loader": "^7.0.0",
     "sass": "^1.52.1",

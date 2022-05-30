@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createWebpackConfig = void 0;
-const path_1 = __importDefault(require("path"));
 const webpack_1 = require("webpack");
+const path_1 = __importDefault(require("path"));
 const html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
 const vue_loader_1 = require("vue-loader");
@@ -13,6 +13,8 @@ const fork_ts_checker_webpack_plugin_1 = __importDefault(require("fork-ts-checke
 const terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 const logger_1 = require("./logger");
 const autoprefixer_1 = __importDefault(require("autoprefixer"));
+const node_polyfill_webpack_plugin_1 = __importDefault(require("node-polyfill-webpack-plugin"));
+const copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 function createWebpackConfig(command, options) {
     const development = command === 'dev';
     const { debug = false } = options || {};
@@ -23,7 +25,20 @@ function createWebpackConfig(command, options) {
     const tsconfigFile = path_1.default.resolve(cwd, 'tsconfig.json');
     const cssLoaders = [
         development ? 'style-loader' : mini_css_extract_plugin_1.default.loader,
-        'css-loader',
+        {
+            loader: 'css-loader',
+            options: {
+                url: {
+                    filter: (url, resourcePath) => {
+                        console.log('url ', url);
+                        if (url.includes('public')) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            }
+        },
         {
             loader: 'postcss-loader',
             options: {
@@ -36,7 +51,8 @@ function createWebpackConfig(command, options) {
         }
     ];
     return {
-        mode: command === 'dev' ? 'development' : 'production',
+        mode: development ? 'development' : 'production',
+        devtool: development ? 'source-map' : false,
         context: path_1.default.resolve(__dirname, '..'),
         entry: {
             app: path_1.default.resolve(cwd, 'src/index.ts')
@@ -50,6 +66,7 @@ function createWebpackConfig(command, options) {
             alias: {
                 '@': src,
                 '@src': src,
+                '@public': '/dist/public'
             },
             extensions: ['.ts', 'tsx', '.js', '.jsx'],
         },
@@ -73,6 +90,16 @@ function createWebpackConfig(command, options) {
                 // https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags
                 __VUE_OPTIONS_API__: true,
                 __VUE_PROD_DEVTOOLS__: false
+            }),
+            // https://github.com/Richienb/node-polyfill-webpack-plugin
+            new node_polyfill_webpack_plugin_1.default({
+                excludeAliases: ['console', 'process', 'buffer']
+            }),
+            // https://github.com/webpack-contrib/copy-webpack-plugin
+            new copy_webpack_plugin_1.default({
+                patterns: [
+                    { from: 'public', to: 'public', context: cwd, noErrorOnMissing: true }
+                ]
             })
         ],
         module: {
@@ -102,11 +129,26 @@ function createWebpackConfig(command, options) {
                 },
                 {
                     test: /\.vue$/,
-                    loader: 'vue-loader'
+                    loader: 'vue-loader',
+                    options: {
+                        // nodeTransforms
+                        compilerOptions: {
+                            nodeTransforms: [
+                                (node, context) => {
+                                    // @ts-ignore
+                                    if (node.tag === 'img') {
+                                        // @ts-ignore
+                                        console.log('node', node.props);
+                                        console.log('context', context);
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     test: /\.(png|jpe?g|gif|svg|mp4)$/i,
-                    type: 'asset/resource'
+                    type: 'asset',
                 }
             ]
         },
