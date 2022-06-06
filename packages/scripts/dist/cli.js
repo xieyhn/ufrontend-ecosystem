@@ -9,7 +9,7 @@ const minimist_1 = __importDefault(require("minimist"));
 const Compiler_1 = __importDefault(require("./Compiler"));
 const command = process.argv[2];
 const { mode = 'development', debug = command === 'dev' } = (0, minimist_1.default)(process.argv);
-[`.env.${mode}.local`, `.env.${mode}`, '.env.local', '.env'].forEach(i => {
+[`.env.${mode}.local`, `.env.${mode}`, '.env.local', '.env'].forEach((i) => {
     dotenv_1.default.config({ path: path_1.default.resolve(process.cwd(), i) });
 });
 // set NODE_ENV

@@ -9,11 +9,9 @@ const base_1 = __importDefault(require("./config/base"));
 const scss_1 = __importDefault(require("./config/scss"));
 const ts_1 = __importDefault(require("./config/ts"));
 const vue_1 = __importDefault(require("./config/vue"));
-const createWebpackConfig = options => {
-    return (0, webpack_merge_1.default)([base_1.default, scss_1.default, ts_1.default, vue_1.default].map(config => {
-        if (typeof config === 'function')
-            return config(options);
-        return config;
-    }));
-};
+const createWebpackConfig = (options) => (0, webpack_merge_1.default)([base_1.default, scss_1.default, ts_1.default, vue_1.default].map((config) => {
+    if (typeof config === 'function')
+        return config(options);
+    return config;
+}));
 exports.createWebpackConfig = createWebpackConfig;

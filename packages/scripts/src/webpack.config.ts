@@ -5,9 +5,7 @@ import scssConfig from './config/scss'
 import tsConfig from './config/ts'
 import vueConfig from './config/vue'
 
-export const createWebpackConfig: ConfigurationGetter = options => {
-  return merge([baseConfig, scssConfig, tsConfig, vueConfig].map(config => {
-    if (typeof config === 'function') return config(options)
-    return config
-  }))
-}
+export const createWebpackConfig: ConfigurationGetter = (options) => merge([baseConfig, scssConfig, tsConfig, vueConfig].map((config) => {
+  if (typeof config === 'function') return config(options)
+  return config
+}))

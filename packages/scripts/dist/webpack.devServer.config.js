@@ -6,9 +6,9 @@ function createDevServerConfig(options) {
         // 处理 vue-router history 模式页面刷新
         // https://github.com/bripkens/connect-history-api-fallback
         historyApiFallback: {
-            index: options.projectConfig.publicPath
+            index: options.projectConfig.publicPath,
         },
-        static: false
+        static: false,
     };
 }
 exports.createDevServerConfig = createDevServerConfig;

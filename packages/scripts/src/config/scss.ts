@@ -1,8 +1,8 @@
 import type { RuleSetUseItem, WebpackPluginInstance } from 'webpack'
-import { ConfigurationGetter } from '../helper'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StylelintPlugin from 'stylelint-webpack-plugin'
 import autoprefixer from 'autoprefixer'
+import { ConfigurationGetter } from '../helper'
 import { postcssPluginCreator } from './plugins/resolvePublicPath'
 
 const createConfig: ConfigurationGetter = (options) => {
@@ -15,8 +15,8 @@ const createConfig: ConfigurationGetter = (options) => {
         url: {
           filter(url: string) {
             return !url.startsWith('/')
-          }
-        }
+          },
+        },
       },
 
     },
@@ -26,16 +26,16 @@ const createConfig: ConfigurationGetter = (options) => {
         postcssOptions: {
           plugins: [
             autoprefixer,
-            postcssPluginCreator(options)
-          ]
-        }
-      }
-    }
+            postcssPluginCreator(options),
+          ],
+        },
+      },
+    },
   ]
   const plugins: WebpackPluginInstance[] = [
     new MiniCssExtractPlugin({
-      filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`
-    })
+      filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
+    }),
   ]
 
   if (projectConfig.enableStylelint) {
@@ -43,8 +43,8 @@ const createConfig: ConfigurationGetter = (options) => {
       new StylelintPlugin({
         extensions: ['vue', 'scss', 'sass', 'css'],
         context: process.cwd(),
-        fix: false
-      })
+        fix: false,
+      }),
     )
   }
 
@@ -60,8 +60,8 @@ const createConfig: ConfigurationGetter = (options) => {
           test: /\.s[ac]ss$/i,
           use: loaders.concat('sass-loader'),
         },
-      ]
-    }
+      ],
+    },
   }
 }
 

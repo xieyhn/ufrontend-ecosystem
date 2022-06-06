@@ -19,22 +19,23 @@ const postcssPluginCreator = (options) => {
                 return exp;
             });
             if (value !== decl.value) {
+                // eslint-disable-next-line no-param-reassign
                 decl.value = value;
             }
-        }
+        },
     };
 };
 exports.postcssPluginCreator = postcssPluginCreator;
 const vueTransformAssetUrlCreator = (options) => {
     const { projectConfig: { publicPath, transformAssetUrls } } = options;
     const { tags } = transformAssetUrls;
-    return node => {
+    return (node) => {
         if (node.type !== 1 /* NodeTypes.ELEMENT */)
             return;
         if (!(node.tag in tags) || !node.props.length)
             return;
-        tags[node.tag].forEach(attrName => {
-            const nodeAttr = node.props.find(i => i.name === attrName);
+        tags[node.tag].forEach((attrName) => {
+            const nodeAttr = node.props.find((i) => i.name === attrName);
             if (!nodeAttr || !nodeAttr.value)
                 return;
             const { content } = nodeAttr.value;

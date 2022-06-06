@@ -1,9 +1,18 @@
-import type { Command } from './Compiler'
 import type { Configuration } from 'webpack'
-import type { ProjectConfig } from './defineProjectConfig'
 import merge from 'webpack-merge'
+import type { Command } from './Compiler'
+import type { ProjectConfig } from './defineProjectConfig'
 import { errorExit } from './logger'
 
+export interface Options {
+  command: Command
+  debug: boolean
+  projectConfig: ProjectConfig
+}
+
+/**
+ * Webpck Configuration getter options
+ */
 const defalutOptions: Options = {
   command: 'dev',
   debug: true,
@@ -19,19 +28,10 @@ const defalutOptions: Options = {
         source: ['src'],
         img: ['src'],
         image: ['xlink:href', 'href'],
-        use: ['xlink:href', 'href']
-      }
-    }
+        use: ['xlink:href', 'href'],
+      },
+    },
   },
-}
-
-/**
- * Webpck Configuration getter options
- */
-export interface Options {
-  command: Command
-  debug: boolean
-  projectConfig: ProjectConfig
 }
 
 export interface ConfigurationGetter {
@@ -39,12 +39,12 @@ export interface ConfigurationGetter {
 }
 
 export function resolveOptions(
-  options: Partial<Options>
+  options: Partial<Options>,
 ): Options {
   const marged = merge(
-    {}, 
-    defalutOptions, 
-    options
+    {},
+    defalutOptions,
+    options,
   ) as Options
   return marged
 }

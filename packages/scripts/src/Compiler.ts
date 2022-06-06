@@ -5,29 +5,37 @@ import webpack, { Configuration } from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import { createWebpackConfig } from './webpack.config'
 import { createDevServerConfig } from './webpack.devServer.config'
-import { log } from './logger'
+import { log, error } from './logger'
 import { ProjectConfig } from './defineProjectConfig'
 import { resolveOptions, Options, checkOptions } from './helper'
 
-export type Command  = 'dev' | 'release'
+export type Command = 'dev' | 'release'
 
 interface CompilerOptions {
   command?: Command,
   debug?: boolean
 }
 
+function loadUserProjectConfig(): ProjectConfig {
+  const projectConfigPath = path.resolve(process.cwd(), 'project.config.js')
+  if (!fs.existsSync(projectConfigPath)) return {}
+  // eslint-disable-next-line
+  return require(projectConfigPath)
+}
+
 class Compiler {
   public webpackConfig: Configuration
+
   public options: Options
 
   constructor(
-    options: CompilerOptions
+    options: CompilerOptions,
   ) {
-    const projectConfig = this.loadUserProjectConfig()
+    const projectConfig = loadUserProjectConfig()
     this.options = resolveOptions({
       command: options.command,
       debug: options.debug,
-      projectConfig
+      projectConfig,
     })
     // 校验参数的合法性
     checkOptions(this.options)
@@ -45,7 +53,7 @@ class Compiler {
     if (this.options.command === 'dev') {
       const server = new WebpackDevServer(
         createDevServerConfig(this.options),
-        compiler
+        compiler,
       )
       server.start()
       return
@@ -53,22 +61,13 @@ class Compiler {
 
     compiler.run((err, stats) => {
       if (err) {
-        console.error(err)
+        error(err)
         return
       }
       if (stats) {
-        console.log(stats.toString({ colors: true }))
+        log(stats.toString({ colors: true }))
       }
     })
-  }
-
-  /**
-   * 加载用户项目配置
-   */
-  loadUserProjectConfig(): ProjectConfig {
-    const projectConfigPath = path.resolve(process.cwd(), 'project.config.js')
-    if (!fs.existsSync(projectConfigPath)) return {}
-    return require(projectConfigPath)
   }
 
   /**

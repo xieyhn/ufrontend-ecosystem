@@ -17,8 +17,8 @@ const createConfig = (options) => {
                 url: {
                     filter(url) {
                         return !url.startsWith('/');
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -27,22 +27,22 @@ const createConfig = (options) => {
                 postcssOptions: {
                     plugins: [
                         autoprefixer_1.default,
-                        (0, resolvePublicPath_1.postcssPluginCreator)(options)
-                    ]
-                }
-            }
-        }
+                        (0, resolvePublicPath_1.postcssPluginCreator)(options),
+                    ],
+                },
+            },
+        },
     ];
     const plugins = [
         new mini_css_extract_plugin_1.default({
-            filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`
-        })
+            filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
+        }),
     ];
     if (projectConfig.enableStylelint) {
         plugins.push(new stylelint_webpack_plugin_1.default({
             extensions: ['vue', 'scss', 'sass', 'css'],
             context: process.cwd(),
-            fix: false
+            fix: false,
         }));
     }
     return {
@@ -57,8 +57,8 @@ const createConfig = (options) => {
                     test: /\.s[ac]ss$/i,
                     use: loaders.concat('sass-loader'),
                 },
-            ]
-        }
+            ],
+        },
     };
 };
 exports.default = createConfig;

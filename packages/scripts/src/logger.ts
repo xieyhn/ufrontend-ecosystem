@@ -1,6 +1,6 @@
-export const log = console.log
+export const { log } = console
 
-export const error = console.error
+export const { error } = console
 
 export const errorExit = (...args: any[]) => {
   error(...args)

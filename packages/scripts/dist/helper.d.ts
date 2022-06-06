@@ -1,9 +1,6 @@
-import type { Command } from './Compiler';
 import type { Configuration } from 'webpack';
+import type { Command } from './Compiler';
 import type { ProjectConfig } from './defineProjectConfig';
-/**
- * Webpck Configuration getter options
- */
 export interface Options {
     command: Command;
     debug: boolean;

@@ -12,15 +12,22 @@ const webpack_config_1 = require("./webpack.config");
 const webpack_devServer_config_1 = require("./webpack.devServer.config");
 const logger_1 = require("./logger");
 const helper_1 = require("./helper");
+function loadUserProjectConfig() {
+    const projectConfigPath = path_1.default.resolve(process.cwd(), 'project.config.js');
+    if (!fs_extra_1.default.existsSync(projectConfigPath))
+        return {};
+    // eslint-disable-next-line
+    return require(projectConfigPath);
+}
 class Compiler {
     webpackConfig;
     options;
     constructor(options) {
-        const projectConfig = this.loadUserProjectConfig();
+        const projectConfig = loadUserProjectConfig();
         this.options = (0, helper_1.resolveOptions)({
             command: options.command,
             debug: options.debug,
-            projectConfig
+            projectConfig,
         });
         // 校验参数的合法性
         (0, helper_1.checkOptions)(this.options);
@@ -39,22 +46,13 @@ class Compiler {
         }
         compiler.run((err, stats) => {
             if (err) {
-                console.error(err);
+                (0, logger_1.error)(err);
                 return;
             }
             if (stats) {
-                console.log(stats.toString({ colors: true }));
+                (0, logger_1.log)(stats.toString({ colors: true }));
             }
         });
-    }
-    /**
-     * 加载用户项目配置
-     */
-    loadUserProjectConfig() {
-        const projectConfigPath = path_1.default.resolve(process.cwd(), 'project.config.js');
-        if (!fs_extra_1.default.existsSync(projectConfigPath))
-            return {};
-        return require(projectConfigPath);
     }
     /**
      * 根据项目配置，最后调整 webpack config

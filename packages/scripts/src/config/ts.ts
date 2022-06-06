@@ -1,8 +1,8 @@
 import path from 'path'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import { ConfigurationGetter } from '../helper'
 import ESLintPlugin from 'eslint-webpack-plugin'
 import { WebpackPluginInstance } from 'webpack'
+import { ConfigurationGetter } from '../helper'
 
 const createConfig: ConfigurationGetter = (options) => {
   const { command, projectConfig } = options
@@ -12,9 +12,9 @@ const createConfig: ConfigurationGetter = (options) => {
     /**
      * 开启独立的进程来检查 ts 文件
      */
-     new ForkTsCheckerWebpackPlugin({
+    new ForkTsCheckerWebpackPlugin({
       typescript: {
-        configFile: tsconfigFile
+        configFile: tsconfigFile,
       },
     }),
   ]
@@ -25,8 +25,8 @@ const createConfig: ConfigurationGetter = (options) => {
         context: process.cwd(),
         extensions: ['vue', 'ts', 'js'],
         fix: false,
-        exclude: 'node_modules'
-      })
+        exclude: 'node_modules',
+      }),
     )
   }
 
@@ -37,7 +37,7 @@ const createConfig: ConfigurationGetter = (options) => {
         {
           test: /\.js$/,
           loader: 'babel-loader',
-          exclude: /node_modules/
+          exclude: /node_modules/,
         },
         {
           test: /\.tsx?$/,
@@ -52,18 +52,18 @@ const createConfig: ConfigurationGetter = (options) => {
                 appendTsSuffixTo: [/\.vue$/],
                 configFile: tsconfigFile,
                 compilerOptions: {
-                  sourceMap: command === 'dev'
+                  sourceMap: command === 'dev',
                 },
                 /**
                  * 关闭类型检检验，校验工作给 ForkTsCheckerWebpackPlugin 插件
                  */
                 transpileOnly: true,
-              }
-            }
+              },
+            },
           ],
         },
-      ]
-    }
+      ],
+    },
   }
 }
 

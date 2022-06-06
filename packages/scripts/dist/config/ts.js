@@ -15,7 +15,7 @@ const createConfig = (options) => {
          */
         new fork_ts_checker_webpack_plugin_1.default({
             typescript: {
-                configFile: tsconfigFile
+                configFile: tsconfigFile,
             },
         }),
     ];
@@ -24,7 +24,7 @@ const createConfig = (options) => {
             context: process.cwd(),
             extensions: ['vue', 'ts', 'js'],
             fix: false,
-            exclude: 'node_modules'
+            exclude: 'node_modules',
         }));
     }
     return {
@@ -34,7 +34,7 @@ const createConfig = (options) => {
                 {
                     test: /\.js$/,
                     loader: 'babel-loader',
-                    exclude: /node_modules/
+                    exclude: /node_modules/,
                 },
                 {
                     test: /\.tsx?$/,
@@ -49,18 +49,18 @@ const createConfig = (options) => {
                                 appendTsSuffixTo: [/\.vue$/],
                                 configFile: tsconfigFile,
                                 compilerOptions: {
-                                    sourceMap: command === 'dev'
+                                    sourceMap: command === 'dev',
                                 },
                                 /**
                                  * 关闭类型检检验，校验工作给 ForkTsCheckerWebpackPlugin 插件
                                  */
                                 transpileOnly: true,
-                            }
-                        }
+                            },
+                        },
                     ],
                 },
-            ]
-        }
+            ],
+        },
     };
 };
 exports.default = createConfig;

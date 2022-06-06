@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkOptions = exports.resolveOptions = void 0;
 const webpack_merge_1 = __importDefault(require("webpack-merge"));
 const logger_1 = require("./logger");
+/**
+ * Webpck Configuration getter options
+ */
 const defalutOptions = {
     command: 'dev',
     debug: true,
@@ -21,9 +24,9 @@ const defalutOptions = {
                 source: ['src'],
                 img: ['src'],
                 image: ['xlink:href', 'href'],
-                use: ['xlink:href', 'href']
-            }
-        }
+                use: ['xlink:href', 'href'],
+            },
+        },
     },
 };
 function resolveOptions(options) {
