@@ -10,7 +10,7 @@
  * + @typescript-eslint/parser
  */
 
- module.exports = {
+module.exports = {
   env: {
     browser: true,
     es2021: true,
@@ -45,6 +45,6 @@
       ts: 'never',
       tsx: 'never',
     }],
-    'no-undef': 'off'
+    'no-undef': 'off',
   },
-};
+}

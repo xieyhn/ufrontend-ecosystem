@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts,.js --fix"
+    "build": "tsc"
   },
   "bin": {
     "ufrontend-scripts": "bin/cli.js"
@@ -43,11 +42,6 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/minimist": "^1.2.2",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
-    "eslint": "^8.17.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "@types/minimist": "^1.2.2"
   }
 }

@@ -1,13 +1,13 @@
 const importResolver = {
   // https://github.com/benmosher/eslint-plugin-import/issues/1396
   [require.resolve('eslint-import-resolver-node')]: {},
-};
+}
 
 try {
-  const vueCliConfig = require.resolve('@vue/cli-service/webpack.config.js');
+  const vueCliConfig = require.resolve('@vue/cli-service/webpack.config.js')
   importResolver[require.resolve('eslint-import-resolver-webpack')] = {
     config: vueCliConfig,
-  };
+  }
 } catch (e) {
   // ignore
 }
@@ -48,4 +48,4 @@ module.exports = {
       ],
     }],
   },
-};
+}
