@@ -46,7 +46,7 @@ const createConfig: ConfigurationGetter = (options) => {
       new StylelintPlugin({
         extensions: ['vue', 'scss', 'sass', 'css'],
         context: process.cwd(),
-        fix: true
+        fix: false
       })
     )
   }

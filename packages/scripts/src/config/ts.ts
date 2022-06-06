@@ -24,7 +24,7 @@ const createConfig: ConfigurationGetter = (options) => {
       new ESLintPlugin({
         context: process.cwd(),
         extensions: ['vue', 'ts', 'js'],
-        fix: true,
+        fix: false,
         exclude: 'node_modules'
       })
     )

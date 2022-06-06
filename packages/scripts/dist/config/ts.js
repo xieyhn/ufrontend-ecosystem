@@ -23,7 +23,7 @@ const createConfig = (options) => {
         plugins.push(new eslint_webpack_plugin_1.default({
             context: process.cwd(),
             extensions: ['vue', 'ts', 'js'],
-            fix: true,
+            fix: false,
             exclude: 'node_modules'
         }));
     }

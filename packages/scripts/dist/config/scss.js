@@ -45,7 +45,7 @@ const createConfig = (options) => {
         plugins.push(new stylelint_webpack_plugin_1.default({
             extensions: ['vue', 'scss', 'sass', 'css'],
             context: process.cwd(),
-            fix: true
+            fix: false
         }));
     }
     return {

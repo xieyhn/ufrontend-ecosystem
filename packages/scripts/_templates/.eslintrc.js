@@ -23,6 +23,7 @@
     'import/resolver': {
       node: {},
       webpack: {
+        // eslint-import-resolver-webpack
         // config: require('./packages/scripts/webpack.config')
       },
     },

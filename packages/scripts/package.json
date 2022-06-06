@@ -1,6 +1,6 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "tsc"
   },
   "bin": {
-    "ufrontend-scripts": "bin/cli.js"
+    "ufrontend-scripts": "dist/cli.js"
   },
   "keywords": [],
   "author": "",
