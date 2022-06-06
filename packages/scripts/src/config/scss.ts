@@ -3,8 +3,6 @@ import { ConfigurationGetter } from '../helper'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StylelintPlugin from 'stylelint-webpack-plugin'
 import autoprefixer from 'autoprefixer'
-// @ts-ignore
-import pxtorem from 'postcss-pxtorem'
 import { postcssPluginCreator } from './plugins/resolvePublicPath'
 
 const createConfig: ConfigurationGetter = (options) => {
@@ -28,7 +26,6 @@ const createConfig: ConfigurationGetter = (options) => {
         postcssOptions: {
           plugins: [
             autoprefixer,
-            pxtorem,
             postcssPluginCreator(options)
           ]
         }

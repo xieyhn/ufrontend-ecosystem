@@ -6,8 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
 const stylelint_webpack_plugin_1 = __importDefault(require("stylelint-webpack-plugin"));
 const autoprefixer_1 = __importDefault(require("autoprefixer"));
-// @ts-ignore
-const postcss_pxtorem_1 = __importDefault(require("postcss-pxtorem"));
 const resolvePublicPath_1 = require("./plugins/resolvePublicPath");
 const createConfig = (options) => {
     const { command, debug, projectConfig } = options;
@@ -29,7 +27,6 @@ const createConfig = (options) => {
                 postcssOptions: {
                     plugins: [
                         autoprefixer_1.default,
-                        postcss_pxtorem_1.default,
                         (0, resolvePublicPath_1.postcssPluginCreator)(options)
                     ]
                 }

@@ -8,7 +8,7 @@ export interface ProjectConfig {
   // Enable stylelint
   enableStylelint?: boolean
   // Enable eslint
-  enableESlint?: boolean,
+  enableESlint?: boolean
   transformAssetUrls?: {
     tags: Record<string, string[]>
   }
