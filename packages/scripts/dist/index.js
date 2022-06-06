@@ -7,13 +7,13 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const minimist_1 = __importDefault(require("minimist"));
 const Compiler_1 = __importDefault(require("./Compiler"));
-const { mode = 'development', debug } = (0, minimist_1.default)(process.argv);
 const command = process.argv[2];
-[`.env.${mode}.local`, `.env.${mode}`, '.env'].forEach(i => {
+const { mode = 'development', debug = command === 'dev' } = (0, minimist_1.default)(process.argv);
+[`.env.${mode}.local`, `.env.${mode}`, '.env.local', '.env'].forEach(i => {
     dotenv_1.default.config({ path: path_1.default.resolve(process.cwd(), i) });
 });
 // set NODE_ENV
 if (typeof process.env.NODE_ENV === 'undefined') {
     process.env.NODE_ENV = command === 'dev' ? 'development' : 'production';
 }
-new Compiler_1.default().run(command, command === 'dev' || !!debug);
+new Compiler_1.default({ command, debug }).run();
