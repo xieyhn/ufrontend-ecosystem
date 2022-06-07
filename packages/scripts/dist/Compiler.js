@@ -60,7 +60,7 @@ class Compiler {
     transformConfig(projectConfig) {
         const { configureWebpack, webpackConfigTransform } = projectConfig;
         if (configureWebpack) {
-            (0, webpack_merge_1.default)(this.webpackConfig, configureWebpack);
+            this.webpackConfig = (0, webpack_merge_1.default)(this.webpackConfig, configureWebpack);
         }
         if (webpackConfigTransform) {
             const config = webpackConfigTransform(this.webpackConfig);
