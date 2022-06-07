@@ -77,7 +77,7 @@ class Compiler {
     const { configureWebpack, webpackConfigTransform } = projectConfig
 
     if (configureWebpack) {
-      merge(this.webpackConfig, configureWebpack)
+      this.webpackConfig = merge(this.webpackConfig, configureWebpack) as Configuration
     }
 
     if (webpackConfigTransform) {
