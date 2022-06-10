@@ -69,6 +69,7 @@ const createConfig: ConfigurationGetter = (options) => {
       ],
     },
     optimization: {
+      nodeEnv: false,
       minimizer: [
         new TerserWebpackPlugin({
           // 注释不单独提出文件

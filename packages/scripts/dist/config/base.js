@@ -71,6 +71,7 @@ const createConfig = (options) => {
             ],
         },
         optimization: {
+            nodeEnv: false,
             minimizer: [
                 new terser_webpack_plugin_1.default({
                     // 注释不单独提出文件
