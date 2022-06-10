@@ -4,7 +4,10 @@ import minimist from 'minimist'
 import Compiler, { Command } from './Compiler'
 
 const command = process.argv[2] as Command
-const { mode = 'development', debug = command === 'dev' } = minimist(process.argv)
+const {
+  mode = command === 'dev' ? 'development' : 'production',
+  debug = command === 'dev',
+} = minimist(process.argv)
 
 // 加载环境变量 .env*
 // dotenv 在已存在变量名时，默认不会选择覆盖，因此这里的变量优先级为第一位最高
