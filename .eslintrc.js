@@ -25,5 +25,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
+    'no-param-reassign': 'off',
   },
 }
