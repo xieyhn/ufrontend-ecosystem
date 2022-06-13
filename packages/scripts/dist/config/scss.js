@@ -7,6 +7,7 @@ const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plug
 const stylelint_webpack_plugin_1 = __importDefault(require("stylelint-webpack-plugin"));
 const autoprefixer_1 = __importDefault(require("autoprefixer"));
 const resolvePublicPath_1 = require("./plugins/resolvePublicPath");
+const consts_1 = require("./consts");
 const createConfig = (options) => {
     const { command, debug, projectConfig } = options;
     const loaders = [
@@ -16,7 +17,7 @@ const createConfig = (options) => {
             options: {
                 url: {
                     filter(url) {
-                        return !url.startsWith('/');
+                        return !resolvePublicPath_1.cssIgnoreUrlMap.get(url);
                     },
                 },
             },
@@ -35,7 +36,7 @@ const createConfig = (options) => {
     ];
     const plugins = [
         new mini_css_extract_plugin_1.default({
-            filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
+            filename: `${consts_1.cssAssetsPrefix}${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
         }),
     ];
     if (projectConfig.enableStylelint) {

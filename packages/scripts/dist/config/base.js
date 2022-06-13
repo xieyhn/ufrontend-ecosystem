@@ -10,6 +10,7 @@ const node_polyfill_webpack_plugin_1 = __importDefault(require("node-polyfill-we
 const copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 // eslint-disable-next-line import/no-extraneous-dependencies
 const terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
+const consts_1 = require("./consts");
 const createConfig = (options) => {
     const { command, debug, projectConfig } = options;
     const src = path_1.default.resolve(process.cwd(), 'src');
@@ -23,7 +24,7 @@ const createConfig = (options) => {
         },
         output: {
             publicPath: projectConfig.publicPath,
-            filename: `js/${fileBaseName}.js`,
+            filename: `${consts_1.jsAssetsPrefix}${fileBaseName}.js`,
             clean: true,
             assetModuleFilename: `assets/${command === 'dev' ? '[name]_' : ''}[hash][ext][query]`,
         },

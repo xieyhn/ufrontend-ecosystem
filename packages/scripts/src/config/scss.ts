@@ -3,7 +3,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StylelintPlugin from 'stylelint-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import { ConfigurationGetter } from '../helper'
-import { postcssPluginCreator } from './plugins/resolvePublicPath'
+import { cssIgnoreUrlMap, postcssPluginCreator } from './plugins/resolvePublicPath'
+import { cssAssetsPrefix } from './consts'
 
 const createConfig: ConfigurationGetter = (options) => {
   const { command, debug, projectConfig } = options
@@ -14,11 +15,10 @@ const createConfig: ConfigurationGetter = (options) => {
       options: {
         url: {
           filter(url: string) {
-            return !url.startsWith('/')
+            return !cssIgnoreUrlMap.get(url)
           },
         },
       },
-
     },
     {
       loader: 'postcss-loader',
@@ -34,7 +34,7 @@ const createConfig: ConfigurationGetter = (options) => {
   ]
   const plugins: WebpackPluginInstance[] = [
     new MiniCssExtractPlugin({
-      filename: `css/${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
+      filename: `${cssAssetsPrefix}${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
     }),
   ]
 

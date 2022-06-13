@@ -13,7 +13,7 @@ const defalutOptions = {
     command: 'dev',
     debug: true,
     projectConfig: {
-        publicPath: '/',
+        publicPath: '',
         configureWebpack: undefined,
         webpackConfigTransform: undefined,
         enableStylelint: false,
@@ -36,7 +36,7 @@ function resolveOptions(options) {
 exports.resolveOptions = resolveOptions;
 function checkOptions(options) {
     const { publicPath } = options.projectConfig;
-    if (!publicPath.endsWith('/')) {
+    if (publicPath && !publicPath.endsWith('/')) {
         (0, logger_1.errorExit)(new Error('publicPath 需要以 / 结尾'));
     }
 }

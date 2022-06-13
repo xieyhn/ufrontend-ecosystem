@@ -6,6 +6,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import TerserWebpackPlugin from 'terser-webpack-plugin'
 import { ConfigurationGetter } from '../helper'
+import { jsAssetsPrefix } from './consts'
 
 const createConfig: ConfigurationGetter = (options) => {
   const { command, debug, projectConfig } = options
@@ -21,7 +22,7 @@ const createConfig: ConfigurationGetter = (options) => {
     },
     output: {
       publicPath: projectConfig.publicPath,
-      filename: `js/${fileBaseName}.js`,
+      filename: `${jsAssetsPrefix}${fileBaseName}.js`,
       clean: true,
       assetModuleFilename: `assets/${command === 'dev' ? '[name]_' : ''}[hash][ext][query]`,
     },
