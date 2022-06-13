@@ -1,3 +1,4 @@
+// 已内置
 import type { Plugin, Declaration } from 'postcss'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { NodeTypes, NodeTransform, AttributeNode } from '@vue/compiler-core'

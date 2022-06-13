@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import merge from 'webpack-merge'
 import webpack, { Configuration } from 'webpack'
-import WebpackDevServer from 'webpack-dev-server'
+import WebpackDevServer, { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 import { createWebpackConfig } from './webpack.config'
 import { createDevServerConfig } from './webpack.devServer.config'
 import { log, error } from './logger'
@@ -23,14 +23,46 @@ function loadUserProjectConfig(): ProjectConfig {
   return require(projectConfigPath)
 }
 
+function transformWebpackConfig(webpackConfig: Configuration, projectConfig: ProjectConfig) {
+  let config = webpackConfig
+  const { configureWebpack, webpackConfigTransform } = projectConfig
+
+  if (configureWebpack) {
+    config = merge(config, configureWebpack) as Configuration
+  }
+
+  if (webpackConfigTransform) {
+    const result = webpackConfigTransform(config)
+    if (result) config = result
+  }
+
+  return config
+}
+
+function transformWebpackDevServerConfig(devServerConfig: DevServerConfiguration, projectConfig: ProjectConfig) {
+  let config = devServerConfig
+  const { configureWebpackDevServer, webpackDevServerConfigTransform } = projectConfig
+
+  if (configureWebpackDevServer) {
+    config = merge(config, configureWebpackDevServer) as DevServerConfiguration
+  }
+
+  if (webpackDevServerConfigTransform) {
+    const result = webpackDevServerConfigTransform(config)
+    if (result) config = result
+  }
+
+  return config
+}
+
 class Compiler {
   public webpackConfig: Configuration
 
+  public webpackDevServerConfig: DevServerConfiguration
+
   public options: Options
 
-  constructor(
-    options: CompilerOptions,
-  ) {
+  constructor(options: CompilerOptions) {
     const projectConfig = loadUserProjectConfig()
     this.options = resolveOptions({
       command: options.command,
@@ -39,23 +71,24 @@ class Compiler {
     })
     // 校验参数的合法性
     checkOptions(this.options)
-    // 生成内置 webpack 配置
-    this.webpackConfig = createWebpackConfig(this.options)
-    // 通过项目配置，修改 webpack 配置
-    this.transformConfig(projectConfig)
+    // webpackConfig
+    this.webpackConfig = transformWebpackConfig(
+      createWebpackConfig(this.options),
+      projectConfig,
+    )
+    // webpackDevServerConfig
+    this.webpackDevServerConfig = transformWebpackDevServerConfig(
+      createDevServerConfig(this.options),
+      projectConfig,
+    )
   }
 
   run() {
     log('Debug:', this.options.debug)
-
     const compiler = webpack(this.webpackConfig)
 
     if (this.options.command === 'dev') {
-      const server = new WebpackDevServer(
-        createDevServerConfig(this.options),
-        compiler,
-      )
-      server.start()
+      new WebpackDevServer(this.webpackDevServerConfig, compiler).start()
       return
     }
 
@@ -68,22 +101,6 @@ class Compiler {
         log(stats.toString({ colors: true }))
       }
     })
-  }
-
-  /**
-   * 根据项目配置，最后调整 webpack config
-   */
-  transformConfig(projectConfig: ProjectConfig) {
-    const { configureWebpack, webpackConfigTransform } = projectConfig
-
-    if (configureWebpack) {
-      this.webpackConfig = merge(this.webpackConfig, configureWebpack) as Configuration
-    }
-
-    if (webpackConfigTransform) {
-      const config = webpackConfigTransform(this.webpackConfig)
-      if (config) this.webpackConfig = config
-    }
   }
 }
 

@@ -1,4 +1,4 @@
-import type { Configuration } from 'webpack'
+import type { Configuration as WebpackConfiguration } from 'webpack'
 import merge from 'webpack-merge'
 import type { Command } from './Compiler'
 import type { ProjectConfig } from './defineProjectConfig'
@@ -11,7 +11,7 @@ export interface Options {
 }
 
 /**
- * Webpck Configuration getter options
+ * Webpack/WebpackDevServer Configuration getter options
  */
 const defalutOptions: Options = {
   command: 'dev',
@@ -35,7 +35,7 @@ const defalutOptions: Options = {
 }
 
 export interface ConfigurationGetter {
-  (options: Options): Configuration
+  (options: Options): WebpackConfiguration
 }
 
 export function resolveOptions(

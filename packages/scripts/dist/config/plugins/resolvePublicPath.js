@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.vueTransformAssetUrlCreator = exports.postcssPluginCreator = exports.cssIgnoreUrlMap = void 0;
 const consts_1 = require("../consts");
 function replacePublicPath(value, publicPath, assetsPrefix = '') {
-    let prefix = publicPath.startsWith('/')
+    const prefix = publicPath.startsWith('/')
         ? '/'
         : assetsPrefix.split('/').filter(Boolean).map(() => '../').join('');
     return value.replace(/^\//, `${prefix}${publicPath.replace(/^\//, '')}`);
@@ -22,7 +22,7 @@ function replacePublicPath(value, publicPath, assetsPrefix = '') {
  */
 exports.cssIgnoreUrlMap = new Map();
 const postcssPluginCreator = (options) => {
-    const processed = new WeakMap;
+    const processed = new WeakMap();
     const { projectConfig: { publicPath } } = options;
     return {
         postcssPlugin: 'postcss-resolve-publicPath',
@@ -48,11 +48,11 @@ const postcssPluginCreator = (options) => {
                 }
                 return exp;
             });
-            // eslint-disable-next-line no-param-reassign
             if (value !== decl.value) {
+                // eslint-disable-next-line no-param-reassign
                 decl.value = value;
                 processed.set(decl, true);
-                newPaths.forEach(p => exports.cssIgnoreUrlMap.set(p, true));
+                newPaths.forEach((p) => exports.cssIgnoreUrlMap.set(p, true));
             }
         },
     };

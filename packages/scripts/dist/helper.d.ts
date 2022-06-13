@@ -1,4 +1,4 @@
-import type { Configuration } from 'webpack';
+import type { Configuration as WebpackConfiguration } from 'webpack';
 import type { Command } from './Compiler';
 import type { ProjectConfig } from './defineProjectConfig';
 export interface Options {
@@ -7,7 +7,7 @@ export interface Options {
     projectConfig: ProjectConfig;
 }
 export interface ConfigurationGetter {
-    (options: Options): Configuration;
+    (options: Options): WebpackConfiguration;
 }
 export declare function resolveOptions(options: Partial<Options>): Options;
 export declare function checkOptions(options: Options): void;

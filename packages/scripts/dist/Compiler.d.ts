@@ -1,5 +1,5 @@
-import { Configuration } from 'webpack';
-import { ProjectConfig } from './defineProjectConfig';
+import { Configuration as Configuration } from 'webpack';
+import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import { Options } from './helper';
 export declare type Command = 'dev' | 'release';
 interface CompilerOptions {
@@ -8,12 +8,9 @@ interface CompilerOptions {
 }
 declare class Compiler {
     webpackConfig: Configuration;
+    webpackDevServerConfig: DevServerConfiguration;
     options: Options;
     constructor(options: CompilerOptions);
     run(): void;
-    /**
-     * 根据项目配置，最后调整 webpack config
-     */
-    transformConfig(projectConfig: ProjectConfig): void;
 }
 export default Compiler;

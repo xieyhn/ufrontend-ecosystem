@@ -19,8 +19,35 @@ function loadUserProjectConfig() {
     // eslint-disable-next-line
     return require(projectConfigPath);
 }
+function transformWebpackConfig(webpackConfig, projectConfig) {
+    let config = webpackConfig;
+    const { configureWebpack, webpackConfigTransform } = projectConfig;
+    if (configureWebpack) {
+        config = (0, webpack_merge_1.default)(config, configureWebpack);
+    }
+    if (webpackConfigTransform) {
+        const result = webpackConfigTransform(config);
+        if (result)
+            config = result;
+    }
+    return config;
+}
+function transformWebpackDevServerConfig(devServerConfig, projectConfig) {
+    let config = devServerConfig;
+    const { configureWebpackDevServer, webpackDevServerConfigTransform } = projectConfig;
+    if (configureWebpackDevServer) {
+        config = (0, webpack_merge_1.default)(config, configureWebpackDevServer);
+    }
+    if (webpackDevServerConfigTransform) {
+        const result = webpackDevServerConfigTransform(config);
+        if (result)
+            config = result;
+    }
+    return config;
+}
 class Compiler {
     webpackConfig;
+    webpackDevServerConfig;
     options;
     constructor(options) {
         const projectConfig = loadUserProjectConfig();
@@ -31,17 +58,16 @@ class Compiler {
         });
         // 校验参数的合法性
         (0, helper_1.checkOptions)(this.options);
-        // 生成内置 webpack 配置
-        this.webpackConfig = (0, webpack_config_1.createWebpackConfig)(this.options);
-        // 通过项目配置，修改 webpack 配置
-        this.transformConfig(projectConfig);
+        // webpackConfig
+        this.webpackConfig = transformWebpackConfig((0, webpack_config_1.createWebpackConfig)(this.options), projectConfig);
+        // webpackDevServerConfig
+        this.webpackDevServerConfig = transformWebpackDevServerConfig((0, webpack_devServer_config_1.createDevServerConfig)(this.options), projectConfig);
     }
     run() {
         (0, logger_1.log)('Debug:', this.options.debug);
         const compiler = (0, webpack_1.default)(this.webpackConfig);
         if (this.options.command === 'dev') {
-            const server = new webpack_dev_server_1.default((0, webpack_devServer_config_1.createDevServerConfig)(this.options), compiler);
-            server.start();
+            new webpack_dev_server_1.default(this.webpackDevServerConfig, compiler).start();
             return;
         }
         compiler.run((err, stats) => {
@@ -53,20 +79,6 @@ class Compiler {
                 (0, logger_1.log)(stats.toString({ colors: true }));
             }
         });
-    }
-    /**
-     * 根据项目配置，最后调整 webpack config
-     */
-    transformConfig(projectConfig) {
-        const { configureWebpack, webpackConfigTransform } = projectConfig;
-        if (configureWebpack) {
-            this.webpackConfig = (0, webpack_merge_1.default)(this.webpackConfig, configureWebpack);
-        }
-        if (webpackConfigTransform) {
-            const config = webpackConfigTransform(this.webpackConfig);
-            if (config)
-                this.webpackConfig = config;
-        }
     }
 }
 exports.default = Compiler;
