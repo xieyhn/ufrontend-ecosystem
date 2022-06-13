@@ -5,6 +5,18 @@ import { NodeTypes, NodeTransform, AttributeNode } from '@vue/compiler-core'
 import { Options } from '../../helper'
 import { cssAssetsPrefix } from '../consts'
 
+const transformAssetUrls: {
+  tags: Record<string, string[]>
+} = {
+  tags: {
+    video: ['src', 'poster'],
+    source: ['src'],
+    img: ['src'],
+    image: ['xlink:href', 'href'],
+    use: ['xlink:href', 'href'],
+  },
+}
+
 function replacePublicPath(value: string, publicPath: string, assetsPrefix: string = '') {
   const prefix = publicPath.startsWith('/')
     ? '/'
@@ -27,7 +39,7 @@ function replacePublicPath(value: string, publicPath: string, assetsPrefix: stri
 export const cssIgnoreUrlMap = new Map<string, true>()
 export const postcssPluginCreator = (options: Options): Plugin => {
   const processed = new WeakMap<Declaration, true>()
-  const { projectConfig: { publicPath } } = options
+  const { projectConfig: { publicPath, css: cssOptions } } = options
   return {
     postcssPlugin: 'postcss-resolve-publicPath',
     Declaration(decl) {
@@ -44,7 +56,11 @@ export const postcssPluginCreator = (options: Options): Plugin => {
       // (mismatch)
       // .+? 关闭贪婪模式
       const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp: string, _, path: string) => {
-        const newPath = replacePublicPath(path, publicPath!, cssAssetsPrefix)
+        const newPath = replacePublicPath(
+          path,
+          publicPath!,
+          cssOptions!.injectMode === 'link' ? cssAssetsPrefix: ''
+        )
         if (newPath !== path) {
           newPaths.add(newPath)
           return exp.replace(path, newPath)
@@ -76,8 +92,8 @@ export const postcssPluginCreator = (options: Options): Plugin => {
  *
  */
 export const vueTransformAssetUrlCreator = (options: Options): NodeTransform => {
-  const { projectConfig: { publicPath, transformAssetUrls } } = options
-  const { tags } = transformAssetUrls!
+  const { projectConfig: { publicPath } } = options
+  const { tags } = transformAssetUrls
 
   return (node) => {
     if (node.type !== NodeTypes.ELEMENT) return

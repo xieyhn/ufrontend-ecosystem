@@ -4,6 +4,7 @@ import StylelintPlugin from 'stylelint-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import { ConfigurationGetter } from '../helper'
 import { cssIgnoreUrlMap, postcssPluginCreator } from './plugins/resolvePublicPath'
+import StylePlugin from './plugins/StylePlugin'
 import { cssAssetsPrefix } from './consts'
 
 const createConfig: ConfigurationGetter = (options) => {
@@ -37,6 +38,10 @@ const createConfig: ConfigurationGetter = (options) => {
       filename: `${cssAssetsPrefix}${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
     }),
   ]
+
+  if (projectConfig.css!.injectMode === 'style') {
+    plugins.push(new StylePlugin())
+  }
 
   if (projectConfig.enableStylelint) {
     plugins.push(

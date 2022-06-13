@@ -11,13 +11,14 @@ export interface ProjectConfig {
   configureWebpackDevServer?: WebpackDevServerConfiguration
   // webpackDevServerConfigTransform
   webpackDevServerConfigTransform?: (webpackDevServerConfig: WebpackDevServerConfiguration) => WebpackDevServerConfiguration | void
+  // css
+  css?: {
+    injectMode: 'style' | 'link'
+  }
   // Enable stylelint
   enableStylelint?: boolean
   // Enable eslint
   enableESlint?: boolean
-  transformAssetUrls?: {
-    tags: Record<string, string[]>
-  }
 }
 
 export function defineProjectConfig(config: ProjectConfig) {
