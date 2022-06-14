@@ -18,15 +18,9 @@ const defalutOptions = {
         webpackConfigTransform: undefined,
         enableStylelint: false,
         enableESlint: false,
-        transformAssetUrls: {
-            tags: {
-                video: ['src', 'poster'],
-                source: ['src'],
-                img: ['src'],
-                image: ['xlink:href', 'href'],
-                use: ['xlink:href', 'href'],
-            },
-        },
+        css: {
+            prodInjectMode: 'link'
+        }
     },
 };
 function resolveOptions(options) {

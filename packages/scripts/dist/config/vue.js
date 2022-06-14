@@ -18,7 +18,7 @@ const createConfig = (options) => ({
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: {
-                    transformAssetUrls: options.projectConfig.transformAssetUrls,
+                    transformAssetUrls: resolvePublicPath_1.transformAssetUrls,
                     compilerOptions: {
                         nodeTransforms: [
                             (0, resolvePublicPath_1.vueTransformAssetUrlCreator)(options),

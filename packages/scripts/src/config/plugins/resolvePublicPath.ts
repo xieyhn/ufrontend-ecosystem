@@ -5,7 +5,7 @@ import { NodeTypes, NodeTransform, AttributeNode } from '@vue/compiler-core'
 import { Options } from '../../helper'
 import { cssAssetsPrefix } from '../consts'
 
-const transformAssetUrls: {
+export const transformAssetUrls: {
   tags: Record<string, string[]>
 } = {
   tags: {
@@ -59,7 +59,7 @@ export const postcssPluginCreator = (options: Options): Plugin => {
         const newPath = replacePublicPath(
           path,
           publicPath!,
-          cssOptions!.injectMode === 'link' ? cssAssetsPrefix: ''
+          cssOptions!.prodInjectMode === 'link' ? cssAssetsPrefix : '',
         )
         if (newPath !== path) {
           newPaths.add(newPath)

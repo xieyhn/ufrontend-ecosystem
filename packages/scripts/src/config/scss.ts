@@ -39,7 +39,7 @@ const createConfig: ConfigurationGetter = (options) => {
     }),
   ]
 
-  if (projectConfig.css!.injectMode === 'style') {
+  if (projectConfig.css!.prodInjectMode === 'style') {
     plugins.push(new StylePlugin())
   }
 

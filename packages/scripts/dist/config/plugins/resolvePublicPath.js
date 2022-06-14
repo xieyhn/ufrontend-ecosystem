@@ -1,7 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.vueTransformAssetUrlCreator = exports.postcssPluginCreator = exports.cssIgnoreUrlMap = void 0;
+exports.vueTransformAssetUrlCreator = exports.postcssPluginCreator = exports.cssIgnoreUrlMap = exports.transformAssetUrls = void 0;
 const consts_1 = require("../consts");
+exports.transformAssetUrls = {
+    tags: {
+        video: ['src', 'poster'],
+        source: ['src'],
+        img: ['src'],
+        image: ['xlink:href', 'href'],
+        use: ['xlink:href', 'href'],
+    },
+};
 function replacePublicPath(value, publicPath, assetsPrefix = '') {
     const prefix = publicPath.startsWith('/')
         ? '/'
@@ -23,7 +32,7 @@ function replacePublicPath(value, publicPath, assetsPrefix = '') {
 exports.cssIgnoreUrlMap = new Map();
 const postcssPluginCreator = (options) => {
     const processed = new WeakMap();
-    const { projectConfig: { publicPath } } = options;
+    const { projectConfig: { publicPath, css: cssOptions } } = options;
     return {
         postcssPlugin: 'postcss-resolve-publicPath',
         Declaration(decl) {
@@ -41,7 +50,7 @@ const postcssPluginCreator = (options) => {
             // (mismatch)
             // .+? 关闭贪婪模式
             const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp, _, path) => {
-                const newPath = replacePublicPath(path, publicPath, consts_1.cssAssetsPrefix);
+                const newPath = replacePublicPath(path, publicPath, cssOptions.prodInjectMode === 'link' ? consts_1.cssAssetsPrefix : '');
                 if (newPath !== path) {
                     newPaths.add(newPath);
                     return exp.replace(path, newPath);
@@ -73,8 +82,8 @@ exports.postcssPluginCreator = postcssPluginCreator;
  *
  */
 const vueTransformAssetUrlCreator = (options) => {
-    const { projectConfig: { publicPath, transformAssetUrls } } = options;
-    const { tags } = transformAssetUrls;
+    const { projectConfig: { publicPath } } = options;
+    const { tags } = exports.transformAssetUrls;
     return (node) => {
         if (node.type !== 1 /* NodeTypes.ELEMENT */)
             return;

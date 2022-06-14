@@ -1,7 +1,7 @@
 import { VueLoaderPlugin } from 'vue-loader'
 import { DefinePlugin } from 'webpack'
 import { ConfigurationGetter } from '../helper'
-import { vueTransformAssetUrlCreator } from './plugins/resolvePublicPath'
+import { transformAssetUrls, vueTransformAssetUrlCreator } from './plugins/resolvePublicPath'
 
 const createConfig: ConfigurationGetter = (options) => ({
   plugins: [
@@ -18,7 +18,7 @@ const createConfig: ConfigurationGetter = (options) => ({
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          transformAssetUrls: options.projectConfig.transformAssetUrls,
+          transformAssetUrls,
           compilerOptions: {
             nodeTransforms: [
               vueTransformAssetUrlCreator(options),

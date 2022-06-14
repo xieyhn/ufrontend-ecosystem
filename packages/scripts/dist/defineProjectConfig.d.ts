@@ -6,10 +6,10 @@ export interface ProjectConfig {
     webpackConfigTransform?: (webpackConfig: WebpackConfiguration) => WebpackConfiguration | void;
     configureWebpackDevServer?: WebpackDevServerConfiguration;
     webpackDevServerConfigTransform?: (webpackDevServerConfig: WebpackDevServerConfiguration) => WebpackDevServerConfiguration | void;
+    css?: {
+        prodInjectMode?: 'style' | 'link';
+    };
     enableStylelint?: boolean;
     enableESlint?: boolean;
-    transformAssetUrls?: {
-        tags: Record<string, string[]>;
-    };
 }
 export declare function defineProjectConfig(config: ProjectConfig): ProjectConfig;

@@ -7,6 +7,7 @@ const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plug
 const stylelint_webpack_plugin_1 = __importDefault(require("stylelint-webpack-plugin"));
 const autoprefixer_1 = __importDefault(require("autoprefixer"));
 const resolvePublicPath_1 = require("./plugins/resolvePublicPath");
+const StylePlugin_1 = __importDefault(require("./plugins/StylePlugin"));
 const consts_1 = require("./consts");
 const createConfig = (options) => {
     const { command, debug, projectConfig } = options;
@@ -39,6 +40,9 @@ const createConfig = (options) => {
             filename: `${consts_1.cssAssetsPrefix}${debug ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
         }),
     ];
+    if (projectConfig.css.prodInjectMode === 'style') {
+        plugins.push(new StylePlugin_1.default());
+    }
     if (projectConfig.enableStylelint) {
         plugins.push(new stylelint_webpack_plugin_1.default({
             extensions: ['vue', 'scss', 'sass', 'css'],

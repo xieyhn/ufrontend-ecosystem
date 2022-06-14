@@ -13,7 +13,7 @@ export interface ProjectConfig {
   webpackDevServerConfigTransform?: (webpackDevServerConfig: WebpackDevServerConfiguration) => WebpackDevServerConfiguration | void
   // css
   css?: {
-    injectMode: 'style' | 'link'
+    prodInjectMode?: 'style' | 'link'
   }
   // Enable stylelint
   enableStylelint?: boolean

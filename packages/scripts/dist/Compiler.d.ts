@@ -1,4 +1,4 @@
-import { Configuration as Configuration } from 'webpack';
+import { Configuration } from 'webpack';
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import { Options } from './helper';
 export declare type Command = 'dev' | 'release';

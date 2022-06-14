@@ -23,8 +23,8 @@ const defalutOptions: Options = {
     enableStylelint: false,
     enableESlint: false,
     css: {
-      injectMode: 'link'
-    }
+      prodInjectMode: 'link',
+    },
   },
 }
 

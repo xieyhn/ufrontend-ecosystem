@@ -1,6 +1,9 @@
 import type { Plugin } from 'postcss';
 import { NodeTransform } from '@vue/compiler-core';
 import { Options } from '../../helper';
+export declare const transformAssetUrls: {
+    tags: Record<string, string[]>;
+};
 /**
  * Example1: (publicPath: '')
  * url('/a.png') => url('a.png')
