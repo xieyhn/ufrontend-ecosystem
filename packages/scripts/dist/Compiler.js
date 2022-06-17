@@ -11,7 +11,7 @@ const webpack_dev_server_1 = __importDefault(require("webpack-dev-server"));
 const webpack_config_1 = require("./webpack.config");
 const webpack_devServer_config_1 = require("./webpack.devServer.config");
 const logger_1 = require("./logger");
-const helper_1 = require("./helper");
+const options_1 = require("./options");
 function loadUserProjectConfig() {
     const projectConfigPath = path_1.default.resolve(process.cwd(), 'project.config.js');
     if (!fs_extra_1.default.existsSync(projectConfigPath))
@@ -51,13 +51,13 @@ class Compiler {
     options;
     constructor(options) {
         const projectConfig = loadUserProjectConfig();
-        this.options = (0, helper_1.resolveOptions)({
+        this.options = (0, options_1.resolveOptions)({
             command: options.command,
             debug: options.debug,
             projectConfig,
         });
         // 校验参数的合法性
-        (0, helper_1.checkOptions)(this.options);
+        (0, options_1.checkOptions)(this.options);
         // webpackConfig
         this.webpackConfig = transformWebpackConfig((0, webpack_config_1.createWebpackConfig)(this.options), projectConfig);
         // webpackDevServerConfig

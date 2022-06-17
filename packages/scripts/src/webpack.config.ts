@@ -1,5 +1,5 @@
 import merge from 'webpack-merge'
-import { ConfigurationGetter } from './helper'
+import { ConfigurationGetter } from './options'
 import baseConfig from './config/base'
 import scssConfig from './config/scss'
 import tsConfig from './config/ts'

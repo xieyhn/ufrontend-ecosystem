@@ -1,3 +1,3 @@
-import { ConfigurationGetter } from '../helper';
+import { ConfigurationGetter } from '../options';
 declare const createConfig: ConfigurationGetter;
 export default createConfig;

@@ -79,9 +79,9 @@ const createConfig = (options) => {
                     extractComments: false,
                     terserOptions: {
                         format: {
-                            comments: false
-                        }
-                    }
+                            comments: false,
+                        },
+                    },
                 }),
             ],
             splitChunks: {

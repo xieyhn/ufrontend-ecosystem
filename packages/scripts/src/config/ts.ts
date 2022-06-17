@@ -2,7 +2,7 @@ import path from 'path'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
 import { WebpackPluginInstance } from 'webpack'
-import { ConfigurationGetter } from '../helper'
+import { ConfigurationGetter } from '../options'
 
 const createConfig: ConfigurationGetter = (options) => {
   const { command, projectConfig } = options

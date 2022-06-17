@@ -7,7 +7,7 @@ import { createWebpackConfig } from './webpack.config'
 import { createDevServerConfig } from './webpack.devServer.config'
 import { log, error } from './logger'
 import { ProjectConfig } from './defineProjectConfig'
-import { resolveOptions, Options, checkOptions } from './helper'
+import { resolveOptions, Options, checkOptions } from './options'
 
 export type Command = 'dev' | 'release'
 

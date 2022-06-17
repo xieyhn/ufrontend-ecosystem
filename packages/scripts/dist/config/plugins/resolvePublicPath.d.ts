@@ -1,6 +1,6 @@
 import type { Plugin } from 'postcss';
 import { NodeTransform } from '@vue/compiler-core';
-import { Options } from '../../helper';
+import { Options } from '../../options';
 export declare const transformAssetUrls: {
     tags: Record<string, string[]>;
 };

@@ -5,7 +5,7 @@ import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import TerserWebpackPlugin from 'terser-webpack-plugin'
-import { ConfigurationGetter } from '../helper'
+import { ConfigurationGetter } from '../options'
 import { jsAssetsPrefix } from './consts'
 
 const createConfig: ConfigurationGetter = (options) => {

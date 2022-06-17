@@ -1,6 +1,6 @@
 import { Configuration } from 'webpack';
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
-import { Options } from './helper';
+import { Options } from './options';
 export declare type Command = 'dev' | 'release';
 interface CompilerOptions {
     command?: Command;

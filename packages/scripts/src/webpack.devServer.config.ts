@@ -1,5 +1,5 @@
 import type { Configuration } from 'webpack-dev-server'
-import { Options } from './helper'
+import { Options } from './options'
 
 export function createDevServerConfig(options: Options): Configuration {
   return {
