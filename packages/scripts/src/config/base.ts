@@ -75,6 +75,11 @@ const createConfig: ConfigurationGetter = (options) => {
         new TerserWebpackPlugin({
           // 注释不单独提出文件
           extractComments: false,
+          terserOptions: {
+            format: {
+              comments: false,
+            },
+          },
         }),
       ],
       splitChunks: {

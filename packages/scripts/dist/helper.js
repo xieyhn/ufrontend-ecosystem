@@ -19,8 +19,8 @@ const defalutOptions = {
         enableStylelint: false,
         enableESlint: false,
         css: {
-            prodInjectMode: 'link'
-        }
+            prodInjectMode: 'link',
+        },
     },
 };
 function resolveOptions(options) {

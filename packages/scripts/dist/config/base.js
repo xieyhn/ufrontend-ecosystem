@@ -77,6 +77,11 @@ const createConfig = (options) => {
                 new terser_webpack_plugin_1.default({
                     // 注释不单独提出文件
                     extractComments: false,
+                    terserOptions: {
+                        format: {
+                            comments: false
+                        }
+                    }
                 }),
             ],
             splitChunks: {
