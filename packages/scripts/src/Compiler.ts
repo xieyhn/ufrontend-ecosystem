@@ -17,10 +17,17 @@ interface CompilerOptions {
 }
 
 function loadUserProjectConfig(): ProjectConfig {
+  const localProjectConfigPath = path.resolve(process.cwd(), 'project.config.local.js')
   const projectConfigPath = path.resolve(process.cwd(), 'project.config.js')
-  if (!fs.existsSync(projectConfigPath)) return {}
-  // eslint-disable-next-line
-  return require(projectConfigPath)
+
+  if (fs.existsSync(localProjectConfigPath)) {
+    // eslint-disable-next-line
+    return require(localProjectConfigPath)
+  } if (fs.existsSync(projectConfigPath)) {
+    // eslint-disable-next-line
+    return require(projectConfigPath)
+  }
+  return {}
 }
 
 function transformWebpackConfig(webpackConfig: Configuration, projectConfig: ProjectConfig) {

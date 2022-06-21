@@ -13,11 +13,17 @@ const webpack_devServer_config_1 = require("./webpack.devServer.config");
 const logger_1 = require("./logger");
 const options_1 = require("./options");
 function loadUserProjectConfig() {
+    const localProjectConfigPath = path_1.default.resolve(process.cwd(), 'project.config.local.js');
     const projectConfigPath = path_1.default.resolve(process.cwd(), 'project.config.js');
-    if (!fs_extra_1.default.existsSync(projectConfigPath))
-        return {};
-    // eslint-disable-next-line
-    return require(projectConfigPath);
+    if (fs_extra_1.default.existsSync(localProjectConfigPath)) {
+        // eslint-disable-next-line
+        return require(localProjectConfigPath);
+    }
+    if (fs_extra_1.default.existsSync(projectConfigPath)) {
+        // eslint-disable-next-line
+        return require(projectConfigPath);
+    }
+    return {};
 }
 function transformWebpackConfig(webpackConfig, projectConfig) {
     let config = webpackConfig;
