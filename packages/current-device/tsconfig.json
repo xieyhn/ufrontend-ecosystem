@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES3",
+    "module": "ESNext",
+    "strict": true,
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "sourceMap": false,
+    "rootDir": "./src",
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "declaration": true
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
