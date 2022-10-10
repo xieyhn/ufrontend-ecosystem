@@ -2,6 +2,11 @@
   "name": "@ufrontend/scripts",
   "version": "0.0.28",
   "main": "dist/index.js",
+  "author": "xieyuhang",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc"
