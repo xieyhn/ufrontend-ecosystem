@@ -1,6 +1,6 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "main": "dist/index.js",
   "author": "xieyuhang",
   "license": "MIT",
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/minimist": "^1.2.2"
+    "@types/minimist": "^1.2.2",
+    "@types/sass-loader": "^8.0.3"
   }
 }

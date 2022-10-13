@@ -1,5 +1,6 @@
 import { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
+import type { Options as SassLoaderOptions } from 'sass-loader'
 
 export interface ProjectConfig {
   publicPath?: string
@@ -14,6 +15,7 @@ export interface ProjectConfig {
   // css
   css?: {
     prodInjectMode?: 'style' | 'link'
+    sassLoaderOptions?: SassLoaderOptions
   }
   // Enable stylelint
   enableStylelint?: boolean

@@ -63,7 +63,10 @@ const createConfig: ConfigurationGetter = (options) => {
         },
         {
           test: /\.s[ac]ss$/i,
-          use: loaders.concat('sass-loader'),
+          use: loaders.concat({
+            loader: 'sass-loader',
+            options: projectConfig.css?.sassLoaderOptions
+          }),
         },
       ],
     },
