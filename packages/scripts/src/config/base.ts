@@ -3,7 +3,6 @@ import { DefinePlugin } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import TerserWebpackPlugin from 'terser-webpack-plugin'
 import { ConfigurationGetter } from '../options'
 import { jsAssetsPrefix } from './consts'

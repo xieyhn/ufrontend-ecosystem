@@ -1,11 +1,10 @@
 import path from 'path'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import ESLintPlugin from 'eslint-webpack-plugin'
 import { WebpackPluginInstance } from 'webpack'
 import { ConfigurationGetter } from '../options'
 
 const createConfig: ConfigurationGetter = (options) => {
-  const { command, projectConfig } = options
+  const { command } = options
   const tsconfigFile = path.resolve(process.cwd(), 'tsconfig.json')
 
   const plugins: WebpackPluginInstance[] = [
@@ -18,17 +17,6 @@ const createConfig: ConfigurationGetter = (options) => {
       },
     }),
   ]
-
-  if (projectConfig.enableESlint) {
-    plugins.push(
-      new ESLintPlugin({
-        context: process.cwd(),
-        extensions: ['vue', 'ts', 'js'],
-        fix: false,
-        exclude: 'node_modules',
-      }),
-    )
-  }
 
   return {
     plugins,

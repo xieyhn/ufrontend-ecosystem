@@ -1,6 +1,5 @@
 import type { RuleSetUseItem, WebpackPluginInstance } from 'webpack'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import StylelintPlugin from 'stylelint-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import { ConfigurationGetter } from '../options'
 import { cssIgnoreUrlMap, postcssPluginCreator } from './plugins/resolvePublicPath'
@@ -43,16 +42,6 @@ const createConfig: ConfigurationGetter = (options) => {
     plugins.push(new StylePlugin())
   }
 
-  if (projectConfig.enableStylelint) {
-    plugins.push(
-      new StylelintPlugin({
-        extensions: ['vue', 'scss', 'sass', 'css'],
-        context: process.cwd(),
-        fix: false,
-      }),
-    )
-  }
-
   return {
     plugins,
     module: {
@@ -65,7 +54,7 @@ const createConfig: ConfigurationGetter = (options) => {
           test: /\.s[ac]ss$/i,
           use: loaders.concat({
             loader: 'sass-loader',
-            options: projectConfig.css?.sassLoaderOptions
+            options: projectConfig.css?.sassLoaderOptions,
           }),
         },
       ],

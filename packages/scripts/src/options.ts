@@ -20,8 +20,6 @@ const defalutOptions: Options = {
     publicPath: '',
     configureWebpack: undefined,
     webpackConfigTransform: undefined,
-    enableStylelint: false,
-    enableESlint: false,
     css: {
       prodInjectMode: 'link',
     },

@@ -17,10 +17,6 @@ export interface ProjectConfig {
     prodInjectMode?: 'style' | 'link'
     sassLoaderOptions?: SassLoaderOptions
   }
-  // Enable stylelint
-  enableStylelint?: boolean
-  // Enable eslint
-  enableESlint?: boolean
 }
 
 export function defineProjectConfig(config: ProjectConfig) {
