@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "vitest"
   },
   "bin": {
     "ufrontend-scripts": "bin/cli.js"
