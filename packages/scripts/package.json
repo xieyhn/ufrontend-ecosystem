@@ -16,7 +16,6 @@
     "ufrontend-scripts": "bin/cli.js"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.2.36",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
@@ -43,7 +42,8 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/minimist": "^1.2.2",
-    "@types/sass-loader": "^8.0.3"
+    "@types/sass-loader": "^8.0.3",
+    "@vue/compiler-core": "^3.2.41"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0",

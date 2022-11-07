@@ -5,15 +5,7 @@ class StylePlugin {
   // eslint-disable-next-line class-methods-use-this
   apply(compiler: webpack.Compiler) {
     compiler.hooks.compilation.tap('StylePlugin', (compilation) => {
-      let { publicPath } = compiler.options.output
-
-      if (publicPath && typeof publicPath !== 'string') {
-        // eslint-disable-next-line no-console
-        console.error('output.publicPath 不支持非 string 类型')
-        process.exit(1)
-      }
-
-      if (publicPath && !publicPath.endsWith('/')) publicPath += '/'
+      const publicPath = compiler.options.output.publicPath as string
 
       const hooks = HtmlWebpackPlugin.getHooks(compilation)
       hooks.alterAssetTagGroups.tapAsync('StylePlugin', ({ headTags }, callback) => {
@@ -24,7 +16,7 @@ class StylePlugin {
             && typeof tag.attributes.href === 'string'
           ) {
             const assetName = publicPath
-              ? tag.attributes.href.replace(publicPath as string, '')
+              ? tag.attributes.href.replace(publicPath, '')
               : tag.attributes.href
 
             tag.tagName = 'style'

@@ -32,8 +32,18 @@ export interface ProjectConfig {
 
   // css 相关的配置方法
   css?: {
-    // 传递给 sass-loader 的选项
+    /**
+     * 传递给 sass-loader 的选项
+     */
     sassLoaderOptions?: SassLoaderOptions
+    /**
+     * 选择 css 如何插入文档中
+     * style：通过 style 标签
+     * link：通过 link 标签，引入外部资源文件
+     *
+     * 注意：此选项仅在 release 模式下生效，因为在 dev 模式下通过 style-loader 始终都是 style 标签插入的
+     */
+    inject: 'style' | 'link'
   }
 }
 
@@ -88,6 +98,11 @@ export function compile(options: CompileOptions = {}) {
 
   loadEnv(mode)
 
+  // set NODE_ENV
+  if (typeof process.env.NODE_ENV === 'undefined') {
+    process.env.NODE_ENV = command === 'dev' ? 'development' : 'production'
+  }
+
   const projectConfig = loadProjectConfig()
   checkProjectConfig(projectConfig)
 
@@ -100,13 +115,13 @@ export function compile(options: CompileOptions = {}) {
 
   compiler.run((err, stats) => {
     if (err) {
-      // TODO
-      // error(err)
-      return
+      // eslint-disable-next-line no-console
+      console.error(err)
+      process.exit(1)
     }
     if (stats) {
-      // TODO
-      // log(stats.toString({ colors: true }))
+      // eslint-disable-next-line no-console
+      console.log(stats.toString({ colors: true }))
     }
   })
 }

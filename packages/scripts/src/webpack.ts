@@ -13,6 +13,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import autoprefixer from 'autoprefixer'
 import { VueLoaderPlugin } from 'vue-loader'
 import type { Command, ProjectConfig } from './compile'
+import { jsPrefix, cssPrefix } from './constants'
+import { postcssPluginCreator, vueTransformAssetUrlCreator, transformAssetUrls } from './plugins/resolvePublicPath'
 
 export function createWebpackConfig(command: Command, projectConfig: ProjectConfig): WebpackConfiguration {
   const devCommand = command === 'dev'
@@ -26,8 +28,8 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       options: {
         url: {
           filter() {
+            // url: string
             // TODO
-            // return !cssIgnoreUrlMap.get(url)
           },
         },
       },
@@ -38,8 +40,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
         postcssOptions: {
           plugins: [
             autoprefixer,
-            // TODO
-            // postcssPluginCreator(options),
+            postcssPluginCreator(command, projectConfig),
           ],
         },
       },
@@ -55,7 +56,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
     },
     output: {
       publicPath: projectConfig.publicPath,
-      filename: `js/${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.js`,
+      filename: `${jsPrefix}${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.js`,
       clean: true,
       assetModuleFilename: `assets/${devCommand ? '[name]_' : ''}[hash][ext][query]`,
     },
@@ -108,7 +109,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       }),
       // css
       new MiniCssExtractPlugin({
-        filename: `css/${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
+        filename: `${cssPrefix}${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
       }),
       // vue
       new VueLoaderPlugin(),
@@ -165,12 +166,10 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
           test: /\.vue$/,
           loader: 'vue-loader',
           options: {
-            // TODO
-            // transformAssetUrls,
+            transformAssetUrls,
             compilerOptions: {
               nodeTransforms: [
-                // TODO
-                // vueTransformAssetUrlCreator(options),
+                vueTransformAssetUrlCreator(projectConfig),
               ],
             },
           },
