@@ -41,7 +41,7 @@ export const postcssPluginCreator = (command: Command, projectConfig: ProjectCon
   const { publicPath, css } = projectConfig
 
   return {
-    postcssPlugin: 'postcss-resolve-publicPath',
+    postcssPlugin: 'postcss-resolve-public-path',
     Declaration(decl) {
       if (!decl.source?.input.file || /node_modules/.test(decl.source?.input.file)) return
       if (processed.get(decl)) return

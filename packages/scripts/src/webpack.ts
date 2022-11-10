@@ -20,6 +20,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
   const devCommand = command === 'dev'
   const src = path.resolve(process.cwd(), 'src')
   const tsconfigFile = path.resolve(process.cwd(), 'tsconfig.json')
+  const { publicPath } = projectConfig
 
   const cssLoaders: RuleSetUseItem[] = [
     devCommand ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -27,9 +28,16 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       loader: 'css-loader',
       options: {
         url: {
-          filter() {
-            // url: string
-            // TODO
+          filter(url: string) {
+            // 如果是符合 publicPath 规则的就应该被忽略
+            if (publicPath === '') {
+              return !/^[^\.\/]/.test(url)
+            } if (publicPath.startsWith('.')) {
+              return !/^[\.]/.test(url)
+            } if (publicPath.startsWith('/')) {
+              return !/^[\/]/.test(url)
+            }
+            return true
           },
         },
       },

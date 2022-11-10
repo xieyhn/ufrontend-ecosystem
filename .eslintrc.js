@@ -29,5 +29,6 @@ module.exports = {
     'no-use-before-define': 'off',
     'import/no-extraneous-dependencies': 'off',
     'no-plusplus': 'off',
+    'no-useless-escape': 'off',
   },
 }
