@@ -16,7 +16,9 @@ import autoprefixer from 'autoprefixer'
 import { VueLoaderPlugin } from 'vue-loader'
 import type { Command, ProjectConfig } from './compile'
 import { jsPrefix, cssPrefix, transformAssetUrls } from './constants'
-import { isPublicPath, replacePublicPath, withQuery } from './helper'
+import {
+  isExternalUrl, isPublicPath, replacePublicPath, withQuery,
+} from './helper'
 
 export function createWebpackConfig(command: Command, projectConfig: ProjectConfig): WebpackConfiguration {
   const devCommand = command === 'dev'
@@ -31,7 +33,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       options: {
         url: {
           filter(url: string) {
-            return !isPublicPath(url)
+            return !isExternalUrl(url) && !isPublicPath(url)
           },
         },
       },
@@ -96,7 +98,6 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       filename: `${jsPrefix}${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.js`,
       clean: true,
       assetModuleFilename() {
-        // TODO
         return `assets/${devCommand ? '[name]_' : ''}[hash][ext][query]`
       },
     },
@@ -260,6 +261,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
         }),
       ],
       splitChunks: {
+        maxSize: 500 * 1024,
         cacheGroups: {
           common: {
             test: /[\\/]node_modules[\\/]/,

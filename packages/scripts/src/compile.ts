@@ -88,8 +88,8 @@ function loadProjectConfig(): ProjectConfig {
 function checkProjectConfig(projectConfig: ProjectConfig) {
   const { publicPath } = projectConfig
 
-  if (publicPath !== '' && !publicPath.endsWith('/')) {
-    throw new Error('[project.config]: publicPath 选项值应为 \'\' 或者以 \'/\' 结尾')
+  if (publicPath !== '' && (!publicPath.startsWith('/') || !publicPath.endsWith('/'))) {
+    throw new Error('[project.config]: publicPath 选项值支持 \'\' 和 \'/xx/\'')
   }
 }
 

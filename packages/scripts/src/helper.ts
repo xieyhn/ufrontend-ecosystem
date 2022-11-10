@@ -14,6 +14,8 @@ export const hasQuery = (url: string, key: string) => {
 
 export const withQuery = (url: string, key: string) => `${url}${url.includes('?') ? '&' : '?'}${key}`
 
+export const isExternalUrl = (url: string) => /^https?/.test(url)
+
 export const isPublicPath = (url: string) => hasQuery(url, 'public')
 
 export const isCSSUrlRequest = (url: string) => hasQuery(url, 'url')
