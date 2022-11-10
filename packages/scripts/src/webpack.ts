@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import type { Configuration as WebpackConfiguration, RuleSetUseItem } from 'webpack'
 import type { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
+import type { CompilerOptions as VueCompilerOptions } from '@vue/compiler-sfc'
+import type { Plugin as PostcssPlugin, Declaration as PostcssDeclaration } from 'postcss'
 
 import path from 'node:path'
 import { DefinePlugin } from 'webpack'
@@ -13,14 +15,14 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import autoprefixer from 'autoprefixer'
 import { VueLoaderPlugin } from 'vue-loader'
 import type { Command, ProjectConfig } from './compile'
-import { jsPrefix, cssPrefix } from './constants'
-import { postcssPluginCreator, vueTransformAssetUrlCreator, transformAssetUrls } from './plugins/resolvePublicPath'
+import { jsPrefix, cssPrefix, transformAssetUrls } from './constants'
+import { isPublicPath, replacePublicPath, withQuery } from './helper'
 
 export function createWebpackConfig(command: Command, projectConfig: ProjectConfig): WebpackConfiguration {
   const devCommand = command === 'dev'
   const src = path.resolve(process.cwd(), 'src')
   const tsconfigFile = path.resolve(process.cwd(), 'tsconfig.json')
-  const { publicPath } = projectConfig
+  const { publicPath, css } = projectConfig
 
   const cssLoaders: RuleSetUseItem[] = [
     devCommand ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -29,15 +31,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       options: {
         url: {
           filter(url: string) {
-            // 如果是符合 publicPath 规则的就应该被忽略
-            if (publicPath === '') {
-              return !/^[^\.\/]/.test(url)
-            } if (publicPath.startsWith('.')) {
-              return !/^[\.]/.test(url)
-            } if (publicPath.startsWith('/')) {
-              return !/^[\/]/.test(url)
-            }
-            return true
+            return !isPublicPath(url)
           },
         },
       },
@@ -48,7 +42,42 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
         postcssOptions: {
           plugins: [
             autoprefixer,
-            postcssPluginCreator(command, projectConfig),
+            (() => {
+              const processed = new WeakMap<PostcssDeclaration, true>()
+
+              return {
+                postcssPlugin: 'postcss-resolve-public-path',
+                Declaration(decl) {
+                  if (!decl.source?.input.file || /node_modules/.test(decl.source?.input.file)) return
+                  if (processed.get(decl)) return
+
+                  // Example1:
+                  // input: background-image: url('/path/a.png')
+                  // exp: `url('/path/a.png')`
+                  // path: `/path/a.png`
+
+                  // Example2:
+                  // input: background-image: url('../path/a.png')
+                  // (mismatch)
+
+                  // .+? 关闭贪婪模式
+                  const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp: string, _, p: string) => {
+                    const newPath = replacePublicPath(
+                      p,
+                      publicPath,
+                      (command === 'release' && (!(css?.inject) || css.inject === 'link')) ? cssPrefix : '',
+                    )
+                    if (newPath !== p) return exp.replace(p, withQuery(newPath, 'public'))
+                    return exp
+                  })
+                  if (value !== decl.value) {
+                    // eslint-disable-next-line no-param-reassign
+                    decl.value = value
+                    processed.set(decl, true)
+                  }
+                },
+              }
+            })() as PostcssPlugin,
           ],
         },
       },
@@ -63,10 +92,13 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       app: path.resolve(src, 'index.ts'),
     },
     output: {
-      publicPath: projectConfig.publicPath,
+      publicPath,
       filename: `${jsPrefix}${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.js`,
       clean: true,
-      assetModuleFilename: `assets/${devCommand ? '[name]_' : ''}[hash][ext][query]`,
+      assetModuleFilename() {
+        // TODO
+        return `assets/${devCommand ? '[name]_' : ''}[hash][ext][query]`
+      },
     },
     resolve: {
       alias: {
@@ -177,9 +209,39 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
             transformAssetUrls,
             compilerOptions: {
               nodeTransforms: [
-                vueTransformAssetUrlCreator(projectConfig),
+                /**
+                 * 处理 publicPath
+                 *
+                 * Example1: (publicPath: '')
+                 * <img src="/a.png" /> => <img src="a.png" />
+                 * <video src="/a.mp4" /> => <video src="a.mp4" />
+                 *
+                 * Example2: (publicPath: './')
+                 * <img src="/a.png" /> => <img src="./a.png" />
+                 * <video src="/a.mp4" /> => <video src="./a.mp4" />
+                 *
+                 * Example3: (publicPath: '/path')
+                 * <img src="/a.png" /> => <img src="/path/a.png" />
+                 * <video src="/a.mp4" /> => <video src="/path/a.mp4" />
+                 *
+                 */
+                (node) => {
+                  if (node.type !== /** NodeTypes.ELEMENT */ 1) return
+                  const { tags } = transformAssetUrls
+                  if (!(node.tag in tags) || !node.props.length) return
+
+                  tags[node.tag].forEach((attrName) => {
+                    const nodeAttr = node.props.find((i) => i.name === attrName)
+                    if (!nodeAttr || nodeAttr.type !== /** NodeTypes.ATTRIBUTE */ 6 || !nodeAttr.value) return
+
+                    const { content } = nodeAttr.value
+                    if (content.startsWith('/')) {
+                      nodeAttr.value.content = replacePublicPath(content, publicPath!)
+                    }
+                  })
+                },
               ],
-            },
+            } as VueCompilerOptions,
           },
         },
       ],

@@ -1,15 +1,19 @@
-import type { Configuration } from 'webpack'
-import type { ProjectConfig } from './compile'
+export function replacePublicPath(value: string, publicPath: string, nestedPath: string = '') {
+  const prefix = publicPath.startsWith('/')
+    ? '/'
+    : nestedPath.split('/').filter(Boolean).map(() => '../').join('')
 
-export function defineProjectConfig(config: ProjectConfig) {
-  return config
+  return value.replace(/^\//, `${prefix}${publicPath.replace(/^\//, '')}`)
 }
 
-export function removeEntryConfig(webpackConfig: Configuration) {
-  delete webpackConfig.entry
-
-  webpackConfig.plugins = webpackConfig.plugins!.filter((plugin) => {
-    if (!plugin.constructor) return true
-    return plugin.constructor.name !== 'HtmlWebpackPlugin'
-  })
+export const hasQuery = (url: string, key: string) => {
+  const search = url.split('?').pop()
+  if (!search) return false
+  return search.split('&').some((item) => new RegExp(`^${key}=?`).test(item))
 }
+
+export const withQuery = (url: string, key: string) => `${url}${url.includes('?') ? '&' : '?'}${key}`
+
+export const isPublicPath = (url: string) => hasQuery(url, 'public')
+
+export const isCSSUrlRequest = (url: string) => hasQuery(url, 'url')
