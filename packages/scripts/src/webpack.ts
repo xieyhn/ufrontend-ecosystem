@@ -19,12 +19,13 @@ import { jsPrefix, cssPrefix, transformAssetUrls } from './constants'
 import {
   isExternalUrl, isPublicPath, replacePublicPath, withQuery,
 } from './helper'
+import CSSPlugin from './plugins/CSSPlugin'
 
 export function createWebpackConfig(command: Command, projectConfig: ProjectConfig): WebpackConfiguration {
   const devCommand = command === 'dev'
   const src = path.resolve(process.cwd(), 'src')
   const tsconfigFile = path.resolve(process.cwd(), 'tsconfig.json')
-  const { publicPath, css } = projectConfig
+  const { publicPath } = projectConfig
 
   const cssLoaders: RuleSetUseItem[] = [
     devCommand ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -44,7 +45,16 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
         postcssOptions: {
           plugins: [
             autoprefixer,
+
+            /**
+             * Example1: (publicPath: '')
+             * url('/a.png') => url('a.png')
+             *
+             * Example2: (publicPath: '/path')
+             * url('/a.png') => url('/path/a.png')
+             */
             (() => {
+              // TODO 是否可以移除 processed
               const processed = new WeakMap<PostcssDeclaration, true>()
 
               return {
@@ -64,11 +74,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
 
                   // .+? 关闭贪婪模式
                   const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp: string, _, p: string) => {
-                    const newPath = replacePublicPath(
-                      p,
-                      publicPath,
-                      (command === 'release' && (!(css?.inject) || css.inject === 'link')) ? cssPrefix : '',
-                    )
+                    const newPath = replacePublicPath(p, publicPath)
                     if (newPath !== p) return exp.replace(p, withQuery(newPath, 'public'))
                     return exp
                   })
@@ -152,6 +158,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
       new MiniCssExtractPlugin({
         filename: `${cssPrefix}${devCommand ? '[name].[contenthash:8]' : '[contenthash]'}.css`,
       }),
+      new CSSPlugin(projectConfig),
       // vue
       new VueLoaderPlugin(),
     ],
@@ -217,11 +224,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
                  * <img src="/a.png" /> => <img src="a.png" />
                  * <video src="/a.mp4" /> => <video src="a.mp4" />
                  *
-                 * Example2: (publicPath: './')
-                 * <img src="/a.png" /> => <img src="./a.png" />
-                 * <video src="/a.mp4" /> => <video src="./a.mp4" />
-                 *
-                 * Example3: (publicPath: '/path')
+                 * Example2: (publicPath: '/path')
                  * <img src="/a.png" /> => <img src="/path/a.png" />
                  * <video src="/a.mp4" /> => <video src="/path/a.mp4" />
                  *

@@ -1,9 +1,5 @@
-export function replacePublicPath(value: string, publicPath: string, nestedPath: string = '') {
-  const prefix = publicPath.startsWith('/')
-    ? '/'
-    : nestedPath.split('/').filter(Boolean).map(() => '../').join('')
-
-  return value.replace(/^\//, `${prefix}${publicPath.replace(/^\//, '')}`)
+export function replacePublicPath(value: string, publicPath: string) {
+  return value.replace(/^\//, publicPath)
 }
 
 export const hasQuery = (url: string, key: string) => {
