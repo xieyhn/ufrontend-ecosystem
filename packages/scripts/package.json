@@ -1,6 +1,6 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.31",
+  "version": "0.0.34",
   "main": "dist/index.js",
   "author": "xieyuhang",
   "license": "MIT",
@@ -49,6 +49,6 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0",
-    "typescript": "^3.6.0"
+    "typescript": "^4.0.0"
   }
 }

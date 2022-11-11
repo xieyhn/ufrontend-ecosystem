@@ -14,4 +14,6 @@ export const isExternalUrl = (url: string) => /^https?/.test(url)
 
 export const isPublicPath = (url: string) => hasQuery(url, 'public')
 
+export const isBase64Url = (url: string) => url.startsWith('data:')
+
 export const isCSSUrlRequest = (url: string) => hasQuery(url, 'url')

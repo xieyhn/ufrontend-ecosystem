@@ -5,7 +5,7 @@ import { sources } from 'webpack'
 import type { ProjectConfig } from '../compile'
 
 import { cssPrefix } from '../constants'
-import { isExternalUrl } from '../helper'
+import { isBase64Url, isExternalUrl } from '../helper'
 
 class CSSPlugin {
   // eslint-disable-next-line
@@ -42,7 +42,8 @@ class CSSPlugin {
                       Declaration(decl) {
                         if (processed.get(decl)) return
                         const value = decl.value.replace(/url\s*\((['"])?(.+?)\1\)/g, (exp: string, _, p: string) => {
-                          if (isExternalUrl(p) || p.startsWith('/')) return exp
+                          if (isExternalUrl(p) || p.startsWith('/') || isBase64Url(p)) return exp
+
                           return exp.replace(
                             p,
                             cssPrefix.split('/').filter(Boolean).map(() => '../').join('') + p,
