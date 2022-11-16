@@ -94,7 +94,7 @@ function checkProjectConfig(projectConfig: ProjectConfig) {
 }
 
 export function compile(options: CompileOptions = {}) {
-  const { command = 'dev', mode = 'development' } = options
+  const { command = 'dev', mode = command === 'dev' ? 'development' : 'production' } = options
 
   loadEnv(mode)
 
