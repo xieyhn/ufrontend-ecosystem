@@ -1,7 +1,7 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.35",
-  "main": "dist/index.js",
+  "version": "0.0.36",
+  "main": "dist/expose.js",
   "author": "xieyuhang",
   "license": "MIT",
   "publishConfig": {

@@ -43,7 +43,7 @@ export interface ProjectConfig {
      *
      * 注意：此选项仅在 release 模式下生效，因为在 dev 模式下通过 style-loader 始终都是 style 标签插入的
      */
-    inject: 'style' | 'link'
+    inject?: 'style' | 'link'
   }
 }
 
