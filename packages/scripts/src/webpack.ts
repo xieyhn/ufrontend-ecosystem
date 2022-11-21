@@ -14,6 +14,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import autoprefixer from 'autoprefixer'
 import { VueLoaderPlugin } from 'vue-loader'
+import merge from 'webpack-merge'
 import type { Command, ProjectConfig } from './compile'
 import { jsPrefix, cssPrefix, transformAssetUrls } from './constants'
 import {
@@ -74,7 +75,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
 
                   // .+? 关闭贪婪模式
                   const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp: string, _, p: string) => {
-                    const newPath = replacePublicPath(p, publicPath)
+                    const newPath = replacePublicPath(p, publicPath!)
                     if (newPath !== p) return exp.replace(p, withQuery(newPath, 'public'))
                     return exp
                   })
@@ -92,7 +93,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
     },
   ]
 
-  return {
+  let config: WebpackConfiguration = {
     mode: devCommand ? 'development' : 'production',
     devtool: devCommand ? 'source-map' : false,
     context: path.resolve(__dirname, '..'),
@@ -279,10 +280,19 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
     // https://webpack.js.org/configuration/stats/
     stats: 'errors-warnings',
   }
+
+  if (projectConfig.configureWebpack) {
+    config = merge(config, projectConfig.configureWebpack)
+  }
+  if (projectConfig.webpackConfigTransform) {
+    const newConfig = projectConfig.webpackConfigTransform(config)
+    if (newConfig) config = newConfig
+  }
+  return config
 }
 
 export function createWebpackDevServerConfig(projectConfig: ProjectConfig): WebpackDevServerConfiguration {
-  return {
+  let config: WebpackDevServerConfiguration = {
     // 处理 vue-router history 模式页面刷新
     // https://github.com/bripkens/connect-history-api-fallback
     historyApiFallback: {
@@ -290,4 +300,15 @@ export function createWebpackDevServerConfig(projectConfig: ProjectConfig): Webp
     },
     static: false,
   }
+
+  if (projectConfig.configureWebpackDevServer) {
+    config = merge(config, projectConfig.configureWebpackDevServer)
+  }
+
+  if (projectConfig.webpackDevServerConfigTransform) {
+    const newConfig = projectConfig.webpackDevServerConfigTransform(config)
+    if (newConfig) config = newConfig
+  }
+
+  return config
 }

@@ -18,7 +18,7 @@ export interface CompileOptions {
 }
 
 export interface ProjectConfig {
-  publicPath: string
+  publicPath?: string
 
   // webpack 的额外的配置对象
   configureWebpack?: WebpackConfiguration
@@ -88,7 +88,7 @@ function loadProjectConfig(): ProjectConfig {
 function checkProjectConfig(projectConfig: ProjectConfig) {
   const { publicPath } = projectConfig
 
-  if (publicPath !== '' && (!publicPath.startsWith('/') || !publicPath.endsWith('/'))) {
+  if (publicPath !== '' && (!publicPath!.startsWith('/') || !publicPath!.endsWith('/'))) {
     throw new Error('[project.config]: publicPath 选项值支持 \'\' 和 \'/xx/\'')
   }
 }
