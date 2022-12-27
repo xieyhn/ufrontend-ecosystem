@@ -1,6 +1,6 @@
 {
   "name": "@ufrontend/scripts",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "main": "dist/expose.js",
   "types": "dist/expose.d.ts",
   "author": "xieyuhang",
