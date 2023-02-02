@@ -43,10 +43,9 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
     {
       loader: 'postcss-loader',
       options: {
-        postcssOptions: {
+        postcssOptions: merge({
           plugins: [
-            autoprefixer,
-
+            autoprefixer(),
             /**
              * Example1: (publicPath: '')
              * url('/a.png') => url('a.png')
@@ -88,7 +87,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
               }
             })() as PostcssPlugin,
           ],
-        },
+        }, projectConfig.css?.postcssOptions ?? {}),
       },
     },
   ]

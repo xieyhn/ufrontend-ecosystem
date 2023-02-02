@@ -1,6 +1,7 @@
 import type { Configuration as WebpackConfiguration } from 'webpack'
 import type { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
 import type { Options as SassLoaderOptions } from 'sass-loader'
+import type { ProcessOptions as PostcssProcessOptions, Plugin as PostcssPlugin } from 'postcss'
 
 import path from 'node:path'
 import fs from 'fs-extra'
@@ -35,7 +36,11 @@ export interface ProjectConfig {
     /**
      * 传递给 sass-loader 的选项
      */
-    sassLoaderOptions?: SassLoaderOptions
+    sassLoaderOptions?: SassLoaderOptions,
+    /**
+     * 传递给 postcss-loader 的 postcssOptions 配置，会与内置的配置合并
+     */
+    postcssOptions?: PostcssProcessOptions & { plugins?: PostcssPlugin[] }
     /**
      * 选择 css 如何插入文档中
      * style：通过 style 标签
