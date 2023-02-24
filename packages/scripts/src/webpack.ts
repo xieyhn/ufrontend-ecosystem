@@ -170,9 +170,15 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
         },
         // js
         {
-          test: /\.js$/,
+          test: /\.m?js$/,
           loader: 'babel-loader',
           exclude: /node_modules/,
+        },
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false,
+          },
         },
         // ts && tsx
         {
