@@ -75,7 +75,7 @@ export function createWebpackConfig(command: Command, projectConfig: ProjectConf
                   // .+? 关闭贪婪模式
                   const value = decl.value.replace(/url\s*\((['"])?(\/.+?)\1\)/g, (exp: string, _, p: string) => {
                     const newPath = replacePublicPath(p, publicPath!)
-                    if (newPath !== p) return exp.replace(p, withQuery(newPath, 'public'))
+                    if (newPath !== p) return exp.replace(p, withQuery(newPath, 'public=true'))
                     return exp
                   })
                   if (value !== decl.value) {
